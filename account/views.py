@@ -53,25 +53,32 @@ def result(request, pk: int):
     return render(request, 'result.html', context)
     
 
-def vote(request, page_num: int = None):
-
+def vote(request):
     questions = Question.objects.all()
+        
     paginator = Paginator(questions, 1) 
-
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-    question = page_obj.object_list.get() # object list contains the objects in the page
-    print(request.path_info)
-    print(page_number)
-    print(question)
-    # print(request.get_full_path)
-    # request.session['previous_page'] = request.path_info + "?page=" + page_number
-    # for i in page_obj.paginator.page_range:
-    #     i += page_obj.number
     
     try:
+        page_number = request.GET.get('page', 1)
+        
+        page_obj = paginator.get_page(page_number)
+
+        question = page_obj.object_list.get() # object list contains the objects in the page
+
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
+        # increment selected choice and save
+        selected_choice.vote += 1
+        selected_choice.save()
+
+        # since there is only one object per page
+        # after submitting a current entry on a page, there is no next object in this page,
+        # just go to the next page number which will be checked in the above try except block
+
+        url = f"{reverse('vote')}?page={page_obj.next_page_number()}"
+
+        print('next_url: ', url)
+            
+        return HttpResponseRedirect(url)
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'vote.html', {
             'page_obj': page_obj,
@@ -80,22 +87,7 @@ def vote(request, page_num: int = None):
     except PageNotAnInteger:
         pass
     except EmptyPage:
-        pass
-    else:
-        # increment selected choice and save
-        selected_choice.vote += 1
-        selected_choice.save()
-
-        # check if there is next question/page and redirect to it
-        # else that must be end of question
-        if page_obj.has_next():
-            url = f"{request.path_info}?page={page_obj.next_page_number()}"
-
-        print(url)
-            
-        return HttpResponseRedirect(url)
-        
-        # TODO: 
+        pass 
            
     context = {
         'questions': questions,
