@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="right">
+            <ul class="nav-menu" style="font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">
+                <li><a href="#" class="nav-link">How it works</a></li>
+                <li><a href="#" class="nav-link">Features</a></li>
+                <li><a href="#" class="nav-link">App</a></li>
+                <li><a href="#" class="nav-link">About Us</a></li>
+                <li><a href="{% url 'register' %}"><button class="lp-btn">Sign Up</button></a></li>
+            </ul>
+            <div class="hamburger lp-ham">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </nav>
+    </header>
+    <div class="lp-container">
+        <div class="lp-txt">
+            <p><span class="lp-bold">MyCareerpadi,</span>  Journeying <br class="bk">
+
+                with you to become an IT expert 
+            </p>
+            <a href="#/"><button class="lp-btn btn2">Learn more</button></a>
+        </div>
+        <div class="lp-img">
+            <img src="/static/images/LandingPageImage.svg" alt="">
+        </div>
+
+    </div>
+
+
+
+</body>
+</html>

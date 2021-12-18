@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Result for  {{question.question_post}} {% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for choice in question.choice_set.all %}
+    {{choice.choice_field}} ---- {{choice.vote}} <hr>
+    {% endfor %}
+</div>
+{% endblock %}

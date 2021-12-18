@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<body>
+    <div class="hamburger hamdash" onclick="myFunction()">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+    <!-- <main class="outer">
+        <div class="dash-left" id="dash">
+            <h1>My CareerPadi</h1>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="{% url 'dashboard' %}" class="currentPage"><img src="icons/Vector (4).svg" alt="" class="vec"> Dashboard</a>
+                    </li>
+                    <li>
+                        <a href="#/"><img src="icons/Vector (3).svg" alt="" class="vec"> Courses</a>
+                    </li>
+                    <li>
+                        <a href="#/1"><img src="icons/Vector (2).svg" alt="" class="vec"> Analytics</a>
+                    </li>
+                    <li>
+                        <a href="#/2"><img src="icons/Vector (1).svg" alt="" class="vec"> Account</a>
+                    </li>
+                    <li>
+                        <a href="#/3"><img src="icons/Vector.svg" alt="" class="vec"> Chat</a>
+                    </li>
+                    <li>
+                        <a href="#/4"><img src="icons//Logout.svg" alt="" class="vec"> Log Out</a>
+                    </li>
+                </ul>
+            </nav>
+            <div id="below">
+                <div class="hist">
+                    <img src="icons/history.svg" alt="">
+                    <p>History</p>
+                    <img src="icons/Elipses.svg" alt="">
+                </div>
+                <p id="ref">check your course history <a href="#!">here</a> </p>
+            </div>
+            
+        </div>
+        
+        <div class="dash-middle">
+            <div class="mid1 mid">
+                <h3>Welcome {{request.user.first_name}}</h3>
+                <div class="imagebox"><img src="images/avi.svg" alt=""></div>
+                <a href="#/">Get Started &#8594;</a>
+            </div>
+            <div class="mid2 mid">
+                <h3>Welcome to CareerPadi,</h3>
+ 
+
+                <p>
+                    Here at CareerPadi we’re dedicated to 
+                    helping aspiring IT undergraduates  
+                    reach their goals.
+                </p> 
+                
+                
+                <p>
+                    <span>CareerPadi,</span> Journeying with you to become
+                    an IT expert 
+                </p>
+                
+                
+                
+            </div>
+        </div>
+        
+        <div class="dash-right">
+        <input type="search" name="Search" id="searchbox" placeholder="&#128269; Search">
+            <div class="events">
+                <h3>Events</h3>
+            </div>
+            <div class="calendar">
+                <h3>Calendar</h3>
+                <iframe src="https://calendar.google.com/calendar/embed?height=600&wkst=1&bgcolor=%23039BE5&ctz=Africa%2FLagos&showTitle=0&showNav=1&showDate=0&showPrint=0&showTabs=1&showCalendars=0&showTz=0" ></iframe>
+            </div>
+            
+        </div>
+    </main> -->
+
+    <div class="row mt-5">
+        <div class="col-3">
+          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Dashboard</a>
+            <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Courses</a>
+            <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab" aria-controls="v-pills-messages" aria-selected="false">Analytics</a>
+            <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Account</a>
+            <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab" aria-controls="v-pills-settings" aria-selected="false">Logout</a>
+
+          </div>
+        </div>
+        <div class="col-9 mt-5">
+          <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab"><h4>Welcome, {{request.user.first_name}} {{request.user.last_name}}</h4></div>
+            <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">{{user_profile.dept}}</div>
+            <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                {%  for c in course %}
+                <h3>{{c.course}}</h3>
+                <br>
+                {{c.course_content}}
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                <img src="{{user_profile.avatar}}" alt="">
+                </div>
+          </div>
+        </div>
+      </div>
+ {% endblock %}

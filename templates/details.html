@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block javascript %}
+<script>
+console.log('alkdsfjlkds');
+var submitBtn = document.querySelector('#submit');
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+console.log(csrftoken);
+
+
+submitBtn.addEventListener('click', (e)=> {
+    e.preventDefault();
+    var choice = document.getElementsByName('choice');
+    user_choice = "";
+    for(i=0; i<choice.length; i++){ 
+        if (choice[i].type="radio"){
+            if(choice[i].checked){
+                var user_answer = choice[i].value;
+                user_choice = user_answer;
+                console.log(user_choice);
+
+                
+                
+            
+            }
+        }
+         
+        }       
+    
+    
+
+    
+    $.ajax({
+
+    type: 'POST',
+    url:"{% url 'save-vote' q.pk %}",
+    data:{
+        csrfmiddlewaretoken: csrftoken,
+        choice:user_choice
+    },
+    success: function(data){
+         $('#output').html(data)
+       
+          /* response message */
+        console.log(data);
+     },
+
+     failure: function(error) {
+       console.log(error);
+         
+     }
+
+});
+
+});
+
+</script>
+
+
+
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h3 class="text-center mt-4">VOTE</h3>
+
+ 
+<h3>Vote for {{q.question_post}}</h3> 
+
+
+<h2 id="output" ></h2>
+
+<form method="post" action="{% url 'save-vote' q.pk %}">
+    {% csrf_token %}
+    {% for choice in q.choice_set.all %}
+    <label for="{{choice.id}}">
+        <img src="{{choice.img.url}}" class="img-fluid" width="10%" alt=""/>
+<input type="radio" name="choice" id="{{choice.id}}" class="user_choice" value="{{choice.id}}"> {{choice.choice_field}} 
+</label> <hr>
+{% endfor %}
+
+
+<button  class="btn btn-primary btn-md" type="submit" id="submit" >Submit</button>
+</form>
+</div>
+
+
+{% endblock %}

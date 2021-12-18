@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block scripts %}
+<script src="/static/js/quiz.js" defer></script>
+
+{% endblock scripts %}
+
+{% block content %}
+<div class="container">
+    <!-- <h3 class="text-center mt-4">VOTE</h3> -->
+
+ {% for q in page_obj %}
+ <h3 class="text-center">Vote for {{q.question_post}} </h3>
+ <form method="post" action="{% url 'vote' %}">
+    {% csrf_token %}
+    {% for choice in q.choice_set.all %}
+    <label for="{{choice.id}}">
+        <img src="{{choice.img.url}}" class="img-fluid" width="10%" alt=""/>
+<input type="radio" name="choice" id="{{choice.id}}" class="user_choice" value="{{choice.id}}"> {{choice.choice_field}} 
+</label> <hr>
+{% endfor %}
+
+
+<button  class="btn btn-primary btn-md" type="submit" id="submit" >Submit</button>
+</form>
+</div>
+
+
+{% endfor %}
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock %}

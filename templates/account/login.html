@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block javascript %}
+<script>
+
+var submitBtn = document.querySelector('#login-button');
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+console.log(csrftoken);
+
+submitBtn.addEventListener('click', (e)=> {
+   
+    e.preventDefault();
+   
+    $.ajax({
+
+    type: 'POST',
+    url:'/login/',
+    data:{
+        csrfmiddlewaretoken: csrftoken,
+        username: $('#username').val(),
+        password:$('#password').val()
+    },
+    success: function(data){
+        console.log(data);
+        
+     },
+
+  
+});
+
+});
+
+</script>
+
+
+
+{% endblock %}
+{% block content %}
+
+    <div class="logIn-container">
+        <div class="logIn-header">
+            <img src="/static/images/logo.svg" alt="logo" id="logo">
+            <h2>My CareerPadi</h2>
+            <p>making learning easier</p>
+                   {% if messages %}
+        {% for message in messages %}
+         <div class="alert-{{message.tags}}">
+             {{message}}
+         </div>
+         {% endfor %}
+      {% endif %}
+        </div>
+        <div class="logIn-content">
+            <form class="loginForm" method="POST" >
+                {% csrf_token %}
+                <div class="inputContainer">
+                    <i class="fa fa-user icon" id="ic"> </i>
+                    <input type="text" placeholder="Matric No" class="inputTxt log1" id="username" name="username" required> 
+                    <!-- <input type="text" placeholder="Username" class="inputTxt log1" name="username" required> -->
+
+                </div>
+                <div class="inputContainer">
+                    <i class="fa fa-lock" id="ic"></i>
+                    <input type="password" placeholder="Password" class="inputTxt log2" id="password" name="password" required>
+                </div>
+            
+            <!-- <div>{{form|crispy}}</div> -->
+            
+            {% for i in form.errors %}
+            <div class="alert-danger p-2">
+                {{i}} is incorrect.
+            </div>
+            {% endfor %}
+            
+
+                <div>
+
+                    {% for message in messages %}
+                    <div class="alert-{{message.tags}}">
+                        {{message}}
+                    </div>
+                    {% endfor %}
+                </div>
+                  
+                <div class="save">
+                    <section>
+                        <input type="checkbox" name="checkbox" id="chk" >
+                        <p> Remember me</p>
+                    </section>
+                    <a href="#/"> Forgot password?</a>
+                </div>
+                <div>
+                    <!-- <input type="submit" value="Login" id="login-button"> -->
+                    <button id="login-button" type="submit">Login</button>
+                    <p id="check2">Don't have an Account?<a href="{% url 'register' %}">Sign up</a></p>
+                </div>
+                
+            </form>
+            <div class="logImage">
+                <img src="/static/images/Login-amico.svg" class="logInIMG" alt="">
+            </div>
+        </div>
+          
+    </div>
+    
+{% endblock %}
