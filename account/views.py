@@ -45,7 +45,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 #         # return HttpResponse("You have successfully voted")
     
     
-def result(request, pk):
+def result(request, pk: int):
     question = Question.objects.get(pk=pk)
     context = {
         'question':question
@@ -53,7 +53,7 @@ def result(request, pk):
     return render(request, 'result.html', context)
     
 
-def vote(request):
+def vote(request, page_num: int = None):
 
     questions = Question.objects.all()
     paginator = Paginator(questions, 1) 
@@ -62,15 +62,14 @@ def vote(request):
     page_obj = paginator.get_page(page_number)
 
     question = page_obj.object_list.get() # object list contains the objects in the page
+    print(request.path_info)
+    print(page_number)
     print(question)
     # print(request.get_full_path)
     # request.session['previous_page'] = request.path_info + "?page=" + page_number
     # for i in page_obj.paginator.page_range:
     #     i += page_obj.number
-    url = request.path_info
-    print(url)
     
-
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
@@ -91,7 +90,10 @@ def vote(request):
         # else that must be end of question
         if page_obj.has_next():
             url = f"{request.path_info}?page={page_obj.next_page_number()}"
-            return HttpResponseRedirect(url)
+
+        print(url)
+            
+        return HttpResponseRedirect(url)
         
         # TODO: 
            
