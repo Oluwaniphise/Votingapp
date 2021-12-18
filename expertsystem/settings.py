@@ -88,11 +88,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'Vore',
-        'USERNAME':'Oluwanifise',
-        'PASSWORD':'12345678',
+        'USER':'postgres',
+        'PASSWORD':'projosh10',
         'HOST':'localhost',
         'PORT':'5432'
-
     }
 }
 

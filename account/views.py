@@ -8,7 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.http import JsonResponse
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.core.paginator import Paginator
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 
 # class GeneralCourseListView(ListView):
@@ -60,7 +60,6 @@ def vote(request):
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    print(page_obj.number)
 
     question = page_obj.object_list.get() # object list contains the objects in the page
     print(question)
@@ -68,7 +67,7 @@ def vote(request):
     # request.session['previous_page'] = request.path_info + "?page=" + page_number
     # for i in page_obj.paginator.page_range:
     #     i += page_obj.number
-    url = request.path_info + "?page=%s" % str(i)
+    url = request.path_info
     print(url)
     
 
@@ -79,18 +78,28 @@ def vote(request):
             'page_obj': page_obj,
             'error_message': "You didn't select a choice.",
         })
+    except PageNotAnInteger:
+        pass
+    except EmptyPage:
+        pass
     else:
+        # increment selected choice and save
         selected_choice.vote += 1
         selected_choice.save()
-        # return HttpResponseRedirect(reverse('vote', 
-        # args=(page_obj.next_page_number)))
-        return HttpResponseRedirect(url)
-        # return HttpResponseRedirect("Successfully voted")
+
+        # check if there is next question/page and redirect to it
+        # else that must be end of question
+        if page_obj.has_next():
+            url = f"{request.path_info}?page={page_obj.next_page_number()}"
+            return HttpResponseRedirect(url)
+        
+        # TODO: 
            
-    # context = {'questions':questions,
-    # "page_obj":page_obj
-    # }
-    # return render(request, 'vote.html', context)
+    context = {
+        'questions': questions,
+        "page_obj": page_obj
+    }
+    return render(request, 'vote.html', context)
     
     
 
