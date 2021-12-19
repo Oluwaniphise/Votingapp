@@ -60,6 +60,8 @@ def vote(request):
     
     try:
         page_number = request.GET.get('page', 1)
+
+        print('current_page: ', page_number)
         
         page_obj = paginator.get_page(page_number)
 
@@ -85,9 +87,9 @@ def vote(request):
             'error_message': "You didn't select a choice.",
         })
     except PageNotAnInteger:
-        pass
+        page_obj = paginator.get_page(1)
     except EmptyPage:
-        pass 
+        page_obj = paginator.get_page(paginator.num_pages) 
            
     context = {
         'questions': questions,
